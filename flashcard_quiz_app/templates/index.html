@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f6ff">
+  <title>Flashcard Quiz App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-icon">✦</div><div><strong>FlashLearn</strong><small>STUDY SPACE</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav-item active" data-page="dashboard"><span>▦</span> Dashboard</button>
+    <button class="nav-item" data-page="study"><span>▤</span> Study cards</button>
+    <button class="nav-item" data-page="manage"><span>＋</span> My flashcards</button>
+    <div class="sidebar-bottom">
+      <div class="tip-card"><div class="tip-spark">✧</div><b>Little by little</b><p>Small study sessions add up to big progress.</p></div>
+      <button class="nav-item" id="themeToggle"><span>◐</span> Toggle appearance</button>
+      <div class="profile"><div class="avatar">S</div><div><b>Student workspace</b><small>Personal study space</small></div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+      <div class="breadcrumb">Workspace <span>/</span> <b id="crumb">Dashboard</b></div>
+      <div class="top-actions"><span class="today" id="today"></span><div class="top-avatar">S</div></div>
+    </header>
+
+    <section class="page active" id="dashboardPage">
+      <div class="welcome-row">
+        <div><div class="eyebrow">YOUR LEARNING JOURNEY</div><h1>Ready to learn something<br><span>new today?</span> <span class="wave">✦</span></h1><p class="muted">Build your knowledge, one flashcard at a time.</p></div>
+        <div class="welcome-art"><div class="art-card art-back">✧</div><div class="art-card art-front"><b>Q.</b><span>Learn it.<br>Remember it.</span><i>✦</i></div><div class="art-orbit"></div></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-top"><span>Total flashcards</span><span class="stat-icon purple">▤</span></div><strong id="totalStat">0</strong><small>Cards in your library</small></div>
+        <div class="stat-card"><div class="stat-top"><span>Known cards</span><span class="stat-icon green">✓</span></div><strong id="knownStat">0</strong><small>Ready to remember</small></div>
+        <div class="stat-card"><div class="stat-top"><span>Need revision</span><span class="stat-icon orange">↻</span></div><strong id="revisionStat">0</strong><small>Keep practicing</small></div>
+        <div class="stat-card"><div class="stat-top"><span>Study progress</span><span class="stat-icon blue">◷</span></div><strong id="percentStat">0%</strong><small>Cards marked as known</small></div>
+      </div>
+      <div class="content-grid">
+        <div class="panel progress-panel"><div class="panel-heading"><div><h2>Your progress</h2><p class="muted">Every card you master is a step forward.</p></div><span class="pill">ALL TIME</span></div>
+          <div class="progress-summary"><div><strong id="progressPercent">0%</strong><small>completed</small></div><div class="progress-ring" id="progressRing"><span id="ringText">0%</span></div></div>
+          <div class="progress-track"><div id="progressBar"></div></div><div class="progress-foot"><span><i class="dot green-dot"></i> Known</span><span><i class="dot orange-dot"></i> Need revision</span></div>
+        </div>
+        <div class="panel quick-panel"><div class="panel-heading"><div><h2>Quick actions</h2><p class="muted">Pick up where you left off.</p></div><span class="sparkle">✧</span></div>
+          <button class="action-card primary-action" id="startStudy"><span class="action-icon">▶</span><span><b>Start studying</b><small>Review your flashcards</small></span><span class="arrow">→</span></button>
+          <button class="action-card" id="addFromDash"><span class="action-icon lavender">＋</span><span><b>Add new flashcard</b><small>Create your own study card</small></span><span class="arrow">→</span></button>
+          <button class="text-button" id="resetProgress" style="align-self:flex-start;margin-top:12px">Reset study progress</button>
+        </div>
+      </div>
+      <div class="panel recent-panel"><div class="panel-heading"><div><h2>Recently added</h2><p class="muted">Your latest additions to the library.</p></div><button class="text-button" data-go="manage">View all cards →</button></div><div id="recentCards" class="recent-list"><div class="empty-state">No flashcards yet. Add your first card to get started.</div></div></div>
+    </section>
+
+    <section class="page" id="studyPage">
+      <div class="page-title-row"><div><div class="eyebrow">FOCUS MODE</div><h1>Study <span>session</span></h1><p class="muted">Take your time. Learn at your own pace.</p></div><div class="mode-select"><label for="studyMode">STUDY MODE</label><select id="studyMode"><option value="all">All cards</option><option value="random">Random order</option><option value="revision">Need revision</option></select></div></div>
+      <div class="study-layout">
+        <div class="study-main">
+          <div class="study-meta"><span id="studyCategory" class="category-tag">GENERAL</span><span id="cardCounter">Card 0 of 0</span></div>
+          <div class="flashcard-wrap">
+            <div class="flashcard" id="flashcard">
+              <div class="flashcard-face flashcard-front"><div class="card-topline"><span>✦ FLASHCARD</span><span class="card-number" id="frontNumber">01</span></div><div class="question-content"><span class="question-label">QUESTION</span><h2 id="questionText">Add a flashcard to begin</h2></div><div class="card-bottom"><span>Think about your answer</span><span>↗</span></div></div>
+              <div class="flashcard-face flashcard-back"><div class="card-topline"><span>✦ ANSWER</span><span class="card-number">✓</span></div><div class="question-content"><span class="question-label">ANSWER</span><h2 id="answerText">Your answer will appear here.</h2></div><div class="card-bottom"><span>Keep learning</span><span>✧</span></div></div>
+            </div>
+          </div>
+          <div class="study-controls"><button class="btn btn-light" id="previousBtn">← Previous</button><button class="btn btn-primary show-btn" id="showAnswerBtn">Show answer <span>↗</span></button><button class="btn btn-light" id="nextBtn">Next →</button></div>
+          <div class="mark-row"><span>How well did you know it?</span><div><button class="mark-btn revision-btn" id="markRevision">↻ Need revision</button><button class="mark-btn known-btn" id="markKnown">✓ I knew it</button></div></div>
+        </div>
+        <aside class="study-side panel"><h3>Session guide</h3><p class="muted">A simple routine for better recall.</p><div class="guide-step"><span>01</span><div><b>Read the question</b><small>Try to recall it yourself first.</small></div></div><div class="guide-step"><span>02</span><div><b>Reveal the answer</b><small>Check what you remembered.</small></div></div><div class="guide-step"><span>03</span><div><b>Mark your progress</b><small>Choose known or need revision.</small></div></div><div class="session-progress"><div class="session-progress-head"><b>Session progress</b><span id="sessionProgressText">0 / 0</span></div><div class="progress-track"><div id="sessionProgressBar"></div></div></div></aside>
+      </div>
+    </section>
+
+    <section class="page" id="managePage">
+      <div class="page-title-row"><div><div class="eyebrow">YOUR LIBRARY</div><h1>My <span>flashcards</span></h1><p class="muted">Create, organize and manage your study materials.</p></div><button class="btn btn-primary" id="addCardBtn">＋ Add flashcard</button></div>
+      <div class="library-toolbar"><div class="search-box"><span>⌕</span><input id="searchInput" placeholder="Search questions, answers or subjects..."></div><select id="categoryFilter"><option value="All">All subjects</option></select><span class="result-count" id="resultCount">0 cards</span></div>
+      <div id="cardGrid" class="card-grid"><div class="empty-state">Your flashcard library is empty. Create your first card.</div></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="cardModal"><div class="modal"><div class="modal-heading"><div><div class="eyebrow">PERSONALIZE YOUR LEARNING</div><h2 id="modalTitle">Create flashcard</h2></div><button class="close-btn" id="closeModal">×</button></div><form id="cardForm"><label for="questionInput">Question</label><textarea id="questionInput" rows="3" placeholder="Enter your question..." required></textarea><label for="answerInput">Answer</label><textarea id="answerInput" rows="3" placeholder="Enter the answer..." required></textarea><label for="categoryInput">Subject / Category</label><input id="categoryInput" placeholder="Example: Python, Biology, History" value="General" required><div class="form-actions"><button type="button" class="btn btn-light" id="cancelModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveCardBtn">Save flashcard</button></div></form></div></div>
+<div class="toast" id="toast"></div>
+<div class="completion-modal" id="completionModal"><div class="completion-card"><div class="completion-icon">✦</div><h2>Session complete!</h2><p id="completionText">Great work. Every study session makes a difference.</p><button class="btn btn-primary" id="finishSession">Back to dashboard</button></div></div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
